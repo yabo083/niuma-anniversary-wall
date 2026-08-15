@@ -69,6 +69,11 @@ function renderSignature(item, index, isNew = false) {
   element.style.setProperty("--tone", style.tone);
   element.style.setProperty("--underline-rot", `${style.underline}deg`);
   element.style.setProperty("--signature-font", handwritingFont(item.name));
+  const nameLength = Array.from(item.name).length;
+  const mobilePositions = [34, 66, 44, 72, 28];
+  element.style.setProperty("--mobile-x", `${nameLength > 7 ? 50 : mobilePositions[index % mobilePositions.length]}%`);
+  element.style.setProperty("--mobile-y", `${55 + index * 96}px`);
+  element.style.setProperty("--mobile-size", `${Math.max(13, Math.min(style.size * .72, 280 / nameLength))}px`);
   if (item.image) {
     const image = document.createElement("img");
     image.src = item.image;
@@ -85,6 +90,7 @@ function renderSignature(item, index, isNew = false) {
 
 function renderWall(newestId = null) {
   signatureField.replaceChildren();
+  signatureField.style.setProperty("--mobile-field-height", `${Math.max(580, remoteSignatures.length * 96 + 110)}px`);
   remoteSignatures.forEach((item, index) => renderSignature(item, index, item.id === newestId));
   document.querySelector("#signatureCount").textContent = remoteSignatures.length
     ? `${remoteSignatures.length} 个名字，写在第一个年轮里`

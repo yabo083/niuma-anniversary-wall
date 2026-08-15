@@ -232,8 +232,8 @@ main, .site-header { position: relative; z-index: 1; }
   .letter-ending { min-height: 75vh; }
   .letter-ending h2 { line-height: 1.15; }
   .wall { padding: 90px 16px 80px; }
-  .signature-field { min-height: 68vh; }
-  .signature { font-size: calc(var(--size, 32px) * .74); }
+  .signature-field { min-height: max(68vh, var(--mobile-field-height, 580px)); }
+  .signature { left: var(--mobile-x); top: var(--mobile-y); font-size: var(--mobile-size); }
   .wall-footer { padding-bottom: 55px; }
   .sign-modal { padding: 42px 24px 28px; }
   .sign-modal h2 { font-size: 26px; }
