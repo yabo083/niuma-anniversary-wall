@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&family=ZCOOL+XiaoWei&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Noto+Serif+SC:wght@400;600;700&family=ZCOOL+XiaoWei&family=Zhi+Mang+Xing&display=swap");
 
 :root {
   --ink: #080908;
@@ -11,7 +11,7 @@
   --line: rgba(232, 226, 211, 0.15);
   --serif: "Noto Serif SC", "Songti SC", serif;
   --display: "ZCOOL XiaoWei", "Noto Serif SC", serif;
-  --hand: "Ma Shan Zheng", "STKaiti", "KaiTi", cursive;
+  --hand: "Zhi Mang Xing", "STKaiti", "KaiTi", cursive;
 }
 
 * { box-sizing: border-box; }
@@ -171,7 +171,7 @@ main, .site-header { position: relative; z-index: 1; }
   left: var(--x);
   top: var(--y);
   color: var(--tone, #c7a970);
-  font-family: var(--hand);
+  font-family: var(--signature-font, var(--hand));
   font-size: var(--size, 32px);
   white-space: nowrap;
   transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) skewX(var(--skew, 0deg));
@@ -203,7 +203,7 @@ main, .site-header { position: relative; z-index: 1; }
 .sign-panel input:focus { border-color: var(--gold); }
 #shuffleStyle { border: 1px solid #36372f; background: #0a0b09; color: var(--gold); cursor: pointer; font-size: 20px; }
 .signature-preview { height: 120px; margin-top: 14px; display: grid; place-content: center; color: var(--gold-bright); background: #090a08; overflow: hidden; }
-.signature-preview span { font-family: var(--hand); font-size: 48px; transform: rotate(var(--preview-rot, -2deg)) skewX(var(--preview-skew, -4deg)); }
+.signature-preview span { font-family: var(--signature-font, var(--hand)); font-size: 48px; transform: rotate(var(--preview-rot, -2deg)) skewX(var(--preview-skew, -4deg)); }
 .signature-preview i { display: block; width: 110%; height: 1px; margin-left: -5%; background: currentColor; opacity: .55; transform: rotate(-2deg); }
 .draw-wrap { position: relative; margin-top: 14px; height: 160px; background: #090a08; border: 1px solid #282922; touch-action: none; }
 #drawCanvas { width: 100%; height: 100%; cursor: crosshair; }
@@ -213,39 +213,6 @@ main, .site-header { position: relative; z-index: 1; }
 .submit-signature { width: 100%; margin-top: 4px; background: var(--gold); color: #111; font-weight: 600; }
 .submit-signature:disabled { cursor: wait; opacity: .55; transform: none; }
 .privacy-note { margin: 13px 0 0; text-align: center; color: #565750; font-size: 9px; }
-
-.prototype-switcher { position: fixed; bottom: 18px; left: 50%; z-index: 80; transform: translateX(-50%); display: flex; align-items: center; padding: 5px; background: rgba(235,231,218,.96); color: #111; box-shadow: 0 10px 35px rgba(0,0,0,.45); }
-.prototype-switcher button { width: 38px; height: 38px; border: 0; background: transparent; cursor: pointer; font-size: 18px; }
-.prototype-switcher span { min-width: 138px; display: grid; text-align: center; line-height: 1.2; }
-.prototype-switcher small { color: #777; font-size: 8px; }
-.prototype-switcher strong { font-size: 11px; }
-
-/* Variant B: a visible anniversary timeline with staggered memories. */
-body.variant-b .opening { text-align: left; place-items: center start; padding-left: 14vw; }
-body.variant-b .opening::before { left: 58vw; border-color: rgba(139,168,137,.2); }
-body.variant-b .opening h1 { color: #d9ded3; }
-body.variant-b .opening-year, body.variant-b .eyebrow { color: var(--green); }
-body.variant-b .letter { grid-template-columns: 170px minmax(0, 760px); }
-body.variant-b .letter-aside { top: 20vh; align-items: flex-start; }
-body.variant-b .letter-aside span { writing-mode: horizontal-tb; color: var(--green); }
-body.variant-b .letter-aside i { margin-left: 18px; }
-body.variant-b .letter-content > p:nth-of-type(even) { margin-left: 18%; }
-body.variant-b .letter-content > p { border-left: 1px solid rgba(139,168,137,.35); padding-left: 36px; }
-body.variant-b .letter-content > p::before { content: attr(data-voice); display: block; margin-bottom: 12px; color: var(--green); font-size: 9px; }
-body.variant-b .letter blockquote { color: #b8c9b5; }
-body.variant-b .sign-cta, body.variant-b .submit-signature { border-color: var(--green); color: #dce7d9; }
-
-/* Variant C: alternating voices, closest to Minecraft's end poem. */
-body.variant-c { --gold: #82a8a0; --gold-bright: #b9d8d1; }
-body.variant-c .opening::before { width: 100vw; border-radius: 50%; transform: none; }
-body.variant-c .opening h1 { font-size: clamp(64px, 10vw, 140px); }
-body.variant-c .letter { display: block; max-width: 980px; }
-body.variant-c .letter-aside { display: none; }
-body.variant-c .letter-title { text-align: center; }
-body.variant-c .letter-content > p { width: 74%; text-align: left; font-size: clamp(17px, 1.7vw, 22px); }
-body.variant-c .letter-content > p:nth-of-type(even) { margin-left: auto; color: #a9c1bb; }
-body.variant-c .letter-content > p::before { content: "[ " attr(data-voice) " ]"; display: block; margin-bottom: 15px; color: var(--gold); font: 9px Georgia, serif; }
-body.variant-c .letter blockquote { width: 90%; margin-left: auto; margin-right: auto; text-align: center; }
 
 @keyframes breathe { 50% { opacity: .25; transform: scaleY(.6); } }
 @keyframes inkIn { from { opacity: 0; filter: blur(8px); clip-path: inset(0 100% 0 0); } to { opacity: .88; filter: none; clip-path: inset(0); } }
@@ -257,11 +224,11 @@ body.variant-c .letter blockquote { width: 90%; margin-left: auto; margin-right:
   .opening { min-height: 92vh; padding: 0 24px !important; text-align: center !important; place-items: center !important; }
   .opening::before { width: 82vw; left: auto !important; }
   .opening-intro { max-width: 260px; line-height: 1.8; }
-  .letter, body.variant-b .letter { display: block; min-height: auto; padding: 16vh 24px 4vh; }
+  .letter { display: block; min-height: auto; padding: 16vh 24px 4vh; }
   .letter-aside { display: none; }
   .letter-title { margin-bottom: 14vh; }
-  .letter-content > p, body.variant-b .letter-content > p, body.variant-c .letter-content > p { width: 100%; margin-left: 0 !important; margin-bottom: 13vh; padding-left: 0; border-left: 0; font-size: 16px; line-height: 2.15; }
-  .letter blockquote, body.variant-c .letter blockquote { width: 100%; margin-bottom: 17vh; padding: 35px 0; }
+  .letter-content > p { width: 100%; margin-left: 0 !important; margin-bottom: 13vh; padding-left: 0; border-left: 0; font-size: 16px; line-height: 2.15; }
+  .letter blockquote { width: 100%; margin-bottom: 17vh; padding: 35px 0; }
   .letter-ending { min-height: 75vh; }
   .letter-ending h2 { line-height: 1.15; }
   .wall { padding: 90px 16px 80px; }
@@ -271,7 +238,6 @@ body.variant-c .letter blockquote { width: 90%; margin-left: auto; margin-right:
   .sign-modal { padding: 42px 24px 28px; }
   .sign-modal h2 { font-size: 26px; }
   .signature-preview { height: 100px; }
-  .prototype-switcher { bottom: 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

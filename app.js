@@ -1,13 +1,5 @@
-// PROTOTYPE: three anniversary-letter presentations, switchable with ?variant=a|b|c.
-const variants = [
-  { key: "a", label: "A · 星海长卷" },
-  { key: "b", label: "B · 岁月刻度" },
-  { key: "c", label: "C · 双声终诗" },
-];
-
 const API_BASE = "https://niuma-wall-api.miyakko.de";
 const SUBMITTED_KEY = "niuma-signature-submitted";
-const sampleNames = ["猫二", "NightWind", "方块阿明", "Kira", "Old Steve", "小黑", "Mori", "北辰", "红石头", "白榆", "LemonTea", "一只咸鱼"];
 const signatureSlots = [
   [12, 18], [34, 12], [57, 17], [80, 12], [92, 28],
   [21, 36], [45, 33], [69, 38], [8, 54], [33, 57],
@@ -58,23 +50,10 @@ function signatureStyle(name, index = 0, nonce = 0) {
   };
 }
 
-function applyVariant() {
-  const requested = new URLSearchParams(location.search).get("variant") || "a";
-  const current = variants.find((item) => item.key === requested) || variants[0];
-  document.body.classList.remove("variant-a", "variant-b", "variant-c");
-  document.body.classList.add(`variant-${current.key}`);
-  document.querySelector("#variantLabel").textContent = current.label;
-  return current;
-}
-
-function cycleVariant(direction) {
-  const current = applyVariant();
-  const index = variants.findIndex((item) => item.key === current.key);
-  const next = variants[(index + direction + variants.length) % variants.length];
-  const url = new URL(location.href);
-  url.searchParams.set("variant", next.key);
-  history.replaceState({}, "", url);
-  applyVariant();
+function handwritingFont(name) {
+  return /[\u3400-\u9fff]/.test(name)
+    ? '"Zhi Mang Xing", "STKaiti", "KaiTi", cursive'
+    : '"Caveat", "Segoe Print", cursive';
 }
 
 function renderSignature(item, index, isNew = false) {
@@ -89,6 +68,7 @@ function renderSignature(item, index, isNew = false) {
   element.style.setProperty("--skew", `${style.skew}deg`);
   element.style.setProperty("--tone", style.tone);
   element.style.setProperty("--underline-rot", `${style.underline}deg`);
+  element.style.setProperty("--signature-font", handwritingFont(item.name));
   if (item.image) {
     const image = document.createElement("img");
     image.src = item.image;
@@ -104,10 +84,11 @@ function renderSignature(item, index, isNew = false) {
 }
 
 function renderWall(newestId = null) {
-  const all = [...sampleNames.map((name) => ({ name })), ...remoteSignatures];
   signatureField.replaceChildren();
-  all.forEach((item, index) => renderSignature(item, index, item.id === newestId));
-  document.querySelector("#signatureCount").textContent = `${all.length} 个名字，写在第一个年轮里`;
+  remoteSignatures.forEach((item, index) => renderSignature(item, index, item.id === newestId));
+  document.querySelector("#signatureCount").textContent = remoteSignatures.length
+    ? `${remoteSignatures.length} 个名字，写在第一个年轮里`
+    : "还没有名字，等你写下第一笔";
 }
 
 async function loadSignatures() {
@@ -129,6 +110,7 @@ function updatePreview() {
   const value = nameInput.value.trim() || "你的名字";
   const style = signatureStyle(value, 99, styleNonce);
   preview.querySelector("span").textContent = value;
+  preview.style.setProperty("--signature-font", handwritingFont(value));
   preview.style.setProperty("--preview-rot", `${style.rotation / 2}deg`);
   preview.style.setProperty("--preview-skew", `${style.skew}deg`);
 }
@@ -281,7 +263,6 @@ function setupParticles() {
   requestAnimationFrame(frame);
 }
 
-applyVariant();
 renderWall();
 loadSignatures();
 updatePreview();
@@ -301,8 +282,6 @@ const endingObserver = new IntersectionObserver((entries) => {
 }, { threshold: .72 });
 endingObserver.observe(document.querySelector("#letterEnding"));
 
-document.querySelector("#prevVariant").addEventListener("click", () => cycleVariant(-1));
-document.querySelector("#nextVariant").addEventListener("click", () => cycleVariant(1));
 document.querySelector("#signCta").addEventListener("click", openModal);
 document.querySelector("#signAgain").addEventListener("click", openModal);
 document.querySelector("#modalClose").addEventListener("click", closeModal);
@@ -321,8 +300,5 @@ addEventListener("scroll", updateScroll, { passive: true });
 addEventListener("resize", () => resizeDrawingCanvas());
 addEventListener("keydown", (event) => {
   if (event.key === "Escape" && !modal.hidden) closeModal();
-  const editing = event.target.matches("input, textarea, [contenteditable]");
-  if (!editing && modal.hidden && event.key === "ArrowLeft") cycleVariant(-1);
-  if (!editing && modal.hidden && event.key === "ArrowRight") cycleVariant(1);
 });
 updateScroll();
